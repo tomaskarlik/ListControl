@@ -11,6 +11,7 @@ ListControl requires PHP 5.4 or higher.
 Usage
 -----
 
+*Presenter*
 ```php
 <?php
   public function createComponentYourListName() {
@@ -18,7 +19,7 @@ Usage
     $listControl->setModel($model); // \Nette\Database\Table\Selection
     
     $listControl->setSortableColumns(array('code', 'name', 'price', 'category'));
-    $listControl->addFilterText("code", "code LIKE ?)");
+    $listControl->addFilterText("code", "code LIKE ?");
     $listControl->addFilterText("name", "name ILIKE ?");
     $listControl->addFilterSelect("active",
       array(
@@ -36,4 +37,50 @@ Usage
     return $listControl;
   }
 ?>
+```
+*Template*
+```latte
+<form class="ajax list-control" n:name="filterForm">
+  <table>
+	  <tr>
+	  <th class="{$sortColumn == 'code' ? " $sortType" : ""}">
+		<a class="ajax" n:if="$sortType != 'asc'" n:href="sort! sortColumn => 'code', sortType => 'asc'">Kód produktu</a>
+		<a class="ajax" n:if="$sortType == 'asc'" n:href="sort! sortColumn => 'code', sortType => 'dsc'">Kód produktu</a>
+		<input n:name="code"></th>
+	    <th class="{$sortColumn == 'name' ? " $sortType" : ""}">
+		<a class="ajax" n:if="$sortType != 'asc'" n:href="sort! sortColumn => 'name', sortType => 'asc'">Název produktu</a>
+		<a class="ajax" n:if="$sortType == 'asc'" n:href="sort! sortColumn => 'name', sortType => 'dsc'">Název produktu</a>
+		<input n:name="name"></th>
+	    <th class="{$sortColumn == 'category' ? " $sortType" : ""}">
+		<a class="ajax" n:if="$sortType != 'asc'" n:href="sort! sortColumn => 'category', sortType => 'asc'">Kategorie</a>
+		<a class="ajax" n:if="$sortType == 'asc'" n:href="sort! sortColumn => 'category', sortType => 'dsc'">Kategorie</a>
+		<select n:name="category"></select>
+	    </th>
+	    <th class="{$sortColumn == 'price' ? " $sortType" : ""}">
+		<a class="ajax" n:if="$sortType != 'asc'" n:href="sort! sortColumn => 'price', sortType => 'asc'">Cena s&nbsp;DPH</a>
+		<a class="ajax" n:if="$sortType == 'asc'" n:href="sort! sortColumn => 'price', sortType => 'dsc'">Cena s&nbsp;DPH</a></th>
+	    <th class="">Aktivní
+		<select n:name="active"></select>
+	    </th>
+	</tr>
+	{foreach $items as $item}
+	    <tr>
+		<td>{$item->code}</td>
+		<td><a href="{plink Product:detail id => $item->id}">{$item->name}</a></td>
+		<td>{$item->categor}</td>
+		<td>{$item->price}</td>
+		<td>{$item->active ? 'ano' : 'ne'}</td>
+	    </tr>
+	{/foreach}
+    </table>
+    <input n:name="submit">
+</form>
+{control paginator}
+```
+*JavaScript*
+```js
+$(document).on('change', 'form.list-control select', function (event) { //automatic submit on select change
+  $(this).closest("form").submit();
+  event.preventDefault();
+});
 ```
