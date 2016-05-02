@@ -119,18 +119,26 @@ class ListControl extends Control {
      * @param Control $control
      */
     public function reload(Control $control = NULL) {
-        if ($this->presenter->isAjax()) {
-            $this->invalidateControl();
-        } else {
-            $this->redirect('this');
-        }
+	if ($this->presenter->isAjax()) {
+	    $this->presenter->payload->listControlState = $this->link('this'); //this state url
+	    $this->invalidateControl();
+	} else {
+	    $this->redirect('this');
+	}
+    }
+
+    public function handleReload() {
+	if (!$this->presenter->isAjax()) {
+	    return;
+	}
+	$this->invalidateControl();
     }
 
     /**
      * @return array
      */
     public function getSortableColumns() {
-	    return $this->sortableColumns;
+	return $this->sortableColumns;
     }
 
     /**
@@ -293,6 +301,7 @@ class ListControl extends Control {
     public function createComponentFilterForm() {
 	$form = new Form;
 	$form->setMethod(Form::POST);
+	$form->getElementPrototype()->addAttributes(['data-control' => $this->getName()]);
 
 	foreach ($this->filters['text'] as $idx => $filter) { //add texboxs
 	    $control = $form->addText($idx);

@@ -1,20 +1,20 @@
 <!-- paginator -->
 <div class="paginator">
     <p class="pages" n:if="$paginator->pageCount > 1">
-	{if !$paginator->isFirst()}<a class="ajax" title="předchozí" n:href="page! 'page' => $paginator->page - 1">&laquo;</a>{/if}
+	{if !$paginator->isFirst()}<a title="předchozí" n:href="page! 'page' => $paginator->page - 1">&laquo;</a>{/if}
 	{foreach $steps as $step}
 	    {if $step == $paginator->page}
 		<span>{$step}</span>
 	    {else}
-		<a class="ajax" n:href="page! 'page' => $step">{$step}</a>
+		<a n:href="page! 'page' => $step">{$step}</a>
 	    {/if}
 	    {if $iterator->nextValue > $step + 1}<span>…</span>{/if}
 	{/foreach}
-	{if !$paginator->isLast()}<a class="ajax" title="další" n:href="page! 'page' => $paginator->page + 1">&raquo;</a>{/if}
+	{if !$paginator->isLast()}<a title="další" n:href="page! 'page' => $paginator->page + 1">&raquo;</a>{/if}
     </p>
     <p class="per-page">
 	{foreach $perPageList as $pp}
-	    {if ($pp == $perPage)}<span class="active">{$pp}</span>{else}<a class="ajax" n:href="perPage! perPage => $pp">{$pp}</a>{/if}{if !$iterator->last}, {/if}
+	    {if ($pp == $perPage)}<span class="active">{$pp}</span>{else}<a n:href="perPage! perPage => $pp">{$pp}</a>{/if}{if !$iterator->last}, {/if}
 	{/foreach}
     </p>
 </div>
