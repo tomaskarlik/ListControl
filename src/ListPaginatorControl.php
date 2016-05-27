@@ -53,10 +53,10 @@ class ListPaginatorControl extends Control {
     }
 
     /**
+     * @param Paginator $paginator
      * @return array
      */
-    private function getPaginatorSteps() {
-	$paginator = $this->getPaginator();
+    public static function getPaginatorSteps(Paginator $paginator) {	
 	$page = $paginator->getPage();
 
 	if ($paginator->pageCount < 2) {
@@ -102,7 +102,7 @@ class ListPaginatorControl extends Control {
 	$template->setFile(__DIR__ . '/templates/paginator.latte');
 
 	$template->paginator = $this->getPaginator();
-	$template->steps = $this->getPaginatorSteps();
+	$template->steps = self::getPaginatorSteps($this->paginator);
 	$template->perPageList = $this->getPerPageList();
 	$template->perPage = $this->getPerPage();
 
