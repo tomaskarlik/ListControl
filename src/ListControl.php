@@ -77,8 +77,13 @@ class ListControl extends Control {
     /**
      * @var string
      */
-    private $template = NULL;
-    
+    private $templateFile = NULL;
+
+    /**
+     * @var array
+     */
+    private $templateParameters = array();
+
     /**     
      * @var string
      */
@@ -344,16 +349,17 @@ class ListControl extends Control {
      * @param string $file
      */
     public function setTemplateFile($file) {
-	$this->template = $file;
+	$this->templateFile = $file;
     }
 
     public function render() {
 	$template = $this->getTemplate();
-	$template->setFile($this->template);
+	$template->setParameters($this->templateParameters);
+	$template->setFile($this->templateFile);
 	$template->render();
     }
-    
-    /**     
+
+    /**
      * @paramstring $sort
      * @return self
      */
@@ -361,8 +367,17 @@ class ListControl extends Control {
 	$this->defaultSort = $sort;
 	return $this;
     }
-    
-    /**     
+
+    /**
+     * @param array $parameters
+     * @return self
+     */
+    public function setTemplateParameters(array $parameters) {
+	$this->templateParameters = $parameters + $this->templateParameters;
+	return $this;
+    }
+
+    /**
      * @param mixed $value
      * @param string $type COL_*
      * @return bool
