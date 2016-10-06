@@ -126,7 +126,7 @@ class ListControl extends Control {
     public function reload(Control $control = NULL) {
 	if ($this->presenter->isAjax()) {
 	    $this->presenter->payload->listControlState = $this->link('this'); //this state url
-	    $this->invalidateControl();
+	    $this->redrawControl();
 	} else {
 	    $this->redirect('this');
 	}
@@ -136,7 +136,7 @@ class ListControl extends Control {
 	if (!$this->presenter->isAjax()) {
 	    return;
 	}
-	$this->invalidateControl();
+	$this->redrawControl();
     }
 
     /**
